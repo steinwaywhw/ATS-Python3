@@ -1877,12 +1877,15 @@ val knd = f0body_classify (fbody)
 val () = println! ("emit_f0body: knd = ", knd)
 *)
 //
-val tmpdecs =
-  f0body_get_tmpdeclst(fbody)
-val inss_body =
-  f0body_get_bdinstrlst(fbody)
-val inss_caseof =
-  f0body_collect_caseof(fbody)
+val
+tmpdecs =
+f0body_get_tmpdeclst(fbody)
+val
+inss_body =
+f0body_get_bdinstrlst(fbody)
+val
+inss_caseof =
+f0body_collect_caseof(fbody)
 //
 val () = the_tmpdeclst_set(tmpdecs)
 val () = the_funbodylst_set(inss_body)
@@ -2167,13 +2170,13 @@ of (* case+ *)
 | F0DECLsome
     (fhd, fbody) =>
   {
-    val () = emit_ENDL (out)
-    val () = emit_text (out, "def")
-    val () = emit_SPACE (out)
-    val () = emit_f0head (out, fhd)
-    val () = emit_ENDL (out)
-    val () = emit_f0body (out, fbody)
-    val () = emit_newline (out)
+    val () = emit_ENDL(out)
+    val () = emit_text(out, "def")
+    val () = emit_SPACE(out)
+    val () = emit_f0head(out, fhd)
+    val () = emit_ENDL(out)
+    val () = emit_f0body(out, fbody)
+    val () = emit_newline(out)
   } (* end of [F0DECLsome] *)
 //
 end // end of [emit_f0decl]
@@ -2198,7 +2201,7 @@ case+ d0cs of
 | list_cons
     (d0c, d0cs) => let
     val () =
-      emit_d0ecl (out, d0c)
+      emit_d0ecl(out, d0c)
     // end of [val]
   in
     loop(out, d0cs)
