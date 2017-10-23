@@ -64,11 +64,11 @@ val the_statmps =
 in (* in-of-local *)
 //
 implement
-the_statmpdeclst_get () =
+the_statmpdeclst_get() =
   list_vt2t(list_reverse(!the_statmps))
 //
 implement
-the_statmpdeclst_insert (d0c) = let
+the_statmpdeclst_insert(d0c) = let
   val d0cs = !the_statmps in !the_statmps := list_cons (d0c, d0cs)
 end // end of [the_statmpdeclst_insert]
 //
@@ -79,7 +79,9 @@ end // end of [local]
 extern
 fun
 emit_the_statmpdeclst
-  (out: FILEref, ind: int): void
+(
+out: FILEref, ind: int
+) : void // end-of-fun
 //
 implement
 emit_the_statmpdeclst
@@ -125,7 +127,10 @@ end // end of [emit_the_statmpdeclst]
 extern
 fun
 emit_f0arglst_nonlocal
-  (out: FILEref, f0as: f0arglst): void
+(
+out: FILEref
+,
+f0as: f0arglst ): void
 //
 implement
 emit_f0arglst_nonlocal
@@ -236,9 +241,14 @@ case+ tds of
 | list_nil () => ()
 | list_cons (td, tds) =>
   (
-    case+ td.tmpdec_node of
+    case+
+    td.tmpdec_node
+    of (* case+ *)
     | TMPDECnone
-        (tmp) => auxlst (out, tds, i)
+        (tmp) =>
+      (
+        auxlst(out, tds, i)
+      ) (* TMPDECnone *)
     | TMPDECsome
         (tmp, _) => let
         val () =
@@ -274,7 +284,7 @@ end // end of [emit_tmpdeclst_nonlocal]
 extern
 fun
 emit_mbranchlst_initize
-  (out: FILEref, inss: instrlst): void
+(out: FILEref, inss: instrlst): void
 //
 implement
 emit_mbranchlst_initize
