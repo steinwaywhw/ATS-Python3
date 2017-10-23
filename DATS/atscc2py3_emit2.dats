@@ -368,55 +368,55 @@ end // end of [emit_mbranchlst_nonlocal]
 //
 extern
 fun
-funlab_get_index (fl: label): int
+funlab_get_index(fl: label): int
 extern
 fun
-tmplab_get_index (lab: label): int
+tmplab_get_index(lab: label): int
 //
 (* ****** ****** *)
 //
 extern
 fun
-the_f0arglst_get (): f0arglst
+the_f0arglst_get(): f0arglst
 extern
 fun
-the_f0arglst_set (f0as: f0arglst): void
+the_f0arglst_set(f0as: f0arglst): void
 //
 (* ****** ****** *)
 //
 extern
 fun
-the_tmpdeclst_get (): tmpdeclst
+the_tmpdeclst_get(): tmpdeclst
 extern
 fun
-the_tmpdeclst_set (tds: tmpdeclst): void
+the_tmpdeclst_set(tds: tmpdeclst): void
 //
 (* ****** ****** *)
 //
 extern
 fun
-the_funbodylst_get (): instrlst
+the_funbodylst_get(): instrlst
 extern
 fun
-the_funbodylst_set (inss: instrlst): void
+the_funbodylst_set(inss: instrlst): void
 //
 (* ****** ****** *)
 //
 extern
 fun
-the_branchlablst_get (): labelist
+the_branchlablst_get(): labelist
 extern
 fun
-the_branchlablst_set (tls: labelist): void
+the_branchlablst_set(tls: labelist): void
 //
 (* ****** ****** *)
 //
 extern
 fun
-the_caseofseqlst_get (): instrlst
+the_caseofseqlst_get(): instrlst
 extern
 fun
-the_caseofseqlst_set (inss: instrlst): void
+the_caseofseqlst_set(inss: instrlst): void
 //
 (* ****** ****** *)
 
@@ -433,29 +433,29 @@ val the_caseofseqlst = ref<instrlst> (list_nil)
 in (* in-of-local *)
 
 implement
-the_f0arglst_get () = !the_f0arglst
+the_f0arglst_get() = !the_f0arglst
 implement
-the_f0arglst_set (xs) = !the_f0arglst := xs
+the_f0arglst_set(xs) = !the_f0arglst := xs
 
 implement
-the_tmpdeclst_get () = !the_tmpdeclst
+the_tmpdeclst_get() = !the_tmpdeclst
 implement
-the_tmpdeclst_set (xs) = !the_tmpdeclst := xs
+the_tmpdeclst_set(xs) = !the_tmpdeclst := xs
 
 implement
-the_funbodylst_get () = !the_funbodylst
+the_funbodylst_get() = !the_funbodylst
 implement
-the_funbodylst_set (xs) = !the_funbodylst := xs
+the_funbodylst_set(xs) = !the_funbodylst := xs
 
 implement
-the_branchlablst_get () = !the_branchlablst
+the_branchlablst_get() = !the_branchlablst
 implement
-the_branchlablst_set (tls) = !the_branchlablst := tls
+the_branchlablst_set(tls) = !the_branchlablst := tls
 
 implement
-the_caseofseqlst_get () = !the_caseofseqlst
+the_caseofseqlst_get() = !the_caseofseqlst
 implement
-the_caseofseqlst_set (xs) = !the_caseofseqlst := xs
+the_caseofseqlst_set(xs) = !the_caseofseqlst := xs
 
 end // end of [local]
 
@@ -470,7 +470,7 @@ val n0 = fl0.i0dex_sym
 fun
 auxlst
 (
-  xs: instrlst, i: int
+xs: instrlst, i: int
 ) : int = (
 //
 case+ xs of
@@ -523,13 +523,13 @@ end // end of [tmplab_get_index]
 //
 fun
 emit_funlab_index
- (out: FILEref, fl: label): void =
- emit_int(out, funlab_get_index(fl))
+  (out: FILEref, fl: label): void =
+  emit_int(out, funlab_get_index(fl))
 //
 fun
 emit_tmplab_index
- (out: FILEref, lab: label): void =
- emit_int(out, tmplab_get_index(lab))
+  (out: FILEref, lab: label): void =
+  emit_int(out, tmplab_get_index(lab))
 //
 (* ****** ****** *)
 //
@@ -544,15 +544,16 @@ branchmap_get_index
 //
 val p0 = $UN.cast2ptr(x0)
 //
-fun auxlst
+fun
+auxlst
 (
-  xs: instrlst, i: int
+xs: instrlst, i: int
 ) : int =
 (
 case xs of
 | list_nil() => ~1(*error*)
 | list_cons(x, xs) =>
-    if $UN.cast2ptr(x) = p0 then i else auxlst (xs, i+1)
+    if $UN.cast2ptr(x) = p0 then i else auxlst(xs, i+1)
   // end of [list_cons]
 )
 //
@@ -686,7 +687,8 @@ case+
 ins.instr_node of
 //
 | ATScaseofseq
-    (inss) => (
+    (inss) =>
+  (
     auxlst(inss, cons_vt(ins, res))
   ) (* end of [ATScaseofseq] *)
 | ATSbranchseq(inss) => auxlst(inss, res)
@@ -718,9 +720,9 @@ auxlst
 case+ inss of
 | list_cons
     (ins, inss) => let
-    val res = aux (ins, res) in auxlst (inss, res)
+    val res = aux (ins, res) in auxlst(inss, res)
   end // end of [list_cons]
-| list_nil ((*void*)) => res
+| list_nil((*void*)) => res
 )
 //
 val res = auxlst(inss, list_vt_nil)
@@ -732,47 +734,58 @@ end // end of [instrlst_collect_caseof]
 (* ****** ****** *)
 //
 extern
-fun emit2_instr
-  (out: FILEref, ind: int, ins: instr) : void
+fun
+emit2_instr
+(out: FILEref, ind: int, ins: instr) : void
 extern
-fun emit2_instr_ln
-  (out: FILEref, ind: int, ins: instr) : void
+fun
+emit2_instr_ln
+(out: FILEref, ind: int, ins: instr) : void
 extern
-fun emit2_instr_newline
-  (out: FILEref, ind: int, ins: instr) : void
+fun
+emit2_instr_newline
+(out: FILEref, ind: int, ins: instr) : void
 extern
-fun emit2_instrlst
-  (out: FILEref, ind: int, inss: instrlst) : void
+fun
+emit2_instrlst
+(out: FILEref, ind: int, inss: instrlst) : void
 //
 (* ****** ****** *)
 //
 extern
-fun emit2_ATSfunbodyseq
-  (out: FILEref, ind: int, ins: instr) : void
+fun
+emit2_ATSfunbodyseq
+(out: FILEref, ind: int, ins: instr) : void
 //
 extern
-fun emit2_ATSINSmove_con1
-  (out: FILEref, ind: int, ins: instr) : void
+fun
+emit2_ATSINSmove_con1
+(out: FILEref, ind: int, ins: instr) : void
 //
 extern
-fun emit2_ATSINSmove_boxrec
-  (out: FILEref, ind: int, ins: instr) : void
+fun
+emit2_ATSINSmove_boxrec
+(out: FILEref, ind: int, ins: instr) : void
 //
 extern
-fun emit2_ATSINSmove_delay
-  (out: FILEref, ind: int, ins: instr) : void
+fun
+emit2_ATSINSmove_delay
+(out: FILEref, ind: int, ins: instr) : void
 extern
-fun emit2_ATSINSmove_lazyeval
-  (out: FILEref, ind: int, ins: instr) : void
+fun
+emit2_ATSINSmove_lazyeval
+(out: FILEref, ind: int, ins: instr) : void
 //
 (* ****** ****** *)
 //
 extern
-fun emit2_ATSINSmove_ldelay
-  (out: FILEref, ind: int, ins: instr) : void
+fun
+emit2_ATSINSmove_ldelay
+(out: FILEref, ind: int, ins: instr) : void
 extern
-fun emit2_ATSINSmove_llazyeval
-  (out: FILEref, ind: int, ins: instr) : void
+fun
+emit2_ATSINSmove_llazyeval
+(out: FILEref, ind: int, ins: instr) : void
 //
 (* ****** ****** *)
 //
@@ -1510,17 +1523,19 @@ end // end of [emit_d0ecl]
 (* ****** ****** *)
 //
 extern
-fun emit2_tmpdec
-  (out: FILEref, ind: int, td: tmpdec) : void
+fun
+emit2_tmpdec
+(out: FILEref, ind: int, td: tmpdec) : void
 extern
-fun emit2_tmpdeclst
-  (out: FILEref, ind: int, tds: tmpdeclst) : void
+fun
+emit2_tmpdeclst
+(out: FILEref, ind: int, tds: tmpdeclst) : void
 //
 (* ****** ****** *)
 
 implement
 emit_tmpdec
-  (out, td) = emit2_tmpdec (out, 0(*ind*), td)
+  (out, td) = emit2_tmpdec(out, 0(*ind*), td)
 //
 implement
 emit2_tmpdec
@@ -1530,15 +1545,15 @@ in
 case+
 td.tmpdec_node of
 //
-| TMPDECnone (tmp) =>
+| TMPDECnone(tmp) =>
   {
-    val () = emit_nspc (out, ind)
-    val () = (emit_SHARP (out); emit_tmpvar (out, tmp))
+    val () = emit_nspc(out, ind)
+    val () = (emit_SHARP(out); emit_tmpvar(out, tmp))
   }
-| TMPDECsome (tmp, s0e) =>
+| TMPDECsome(tmp, s0e) =>
   {
-    val () = emit_nspc (out, ind)
-    val () = (emit_tmpvar (out, tmp); emit_text (out, " = None"))
+    val () = emit_nspc(out, ind)
+    val () = (emit_tmpvar(out, tmp); emit_text(out, " = None"))
   }
 end // end of [emit2_tmpdec]
 //
@@ -1551,12 +1566,17 @@ emit2_tmpdeclst
 ) = (
 //
 case+ tds of
-| list_nil () => ()
-| list_cons (td, tds) =>
+| list_nil() => ()
+| list_cons(td, tds) =>
   {
-    val () = emit2_tmpdec (out, ind, td)
-    val () = emit_ENDL (out)
-    val () = emit2_tmpdeclst (out, ind, tds)
+    val () =
+    (
+    emit2_tmpdec
+    (
+      out, ind, td
+    ) ; emit_ENDL(out)
+    )
+    val () = emit2_tmpdeclst(out, ind, tds)
   }
 //
 ) (* end of [emit2_tmpdeclst] *)
@@ -1574,39 +1594,41 @@ emit_branchseqlst
 //
 extern
 fun
-emit_fundef_nonlocal (out: FILEref): void
+emit_fundef_nonlocal(out: FILEref): void
 //
 (* ****** ****** *)
 
 local
 
-fun auxlst
+fun
+auxlst
 (
   out: FILEref, inss: instrlst
 ) : void = let
 //
 val inss =
-instrlst_skip_linepragma (inss)
+instrlst_skip_linepragma(inss)
 //
-val-list_cons (ins, inss) = inss
-val-ATSINSlab (lab) = ins.instr_node
+val-list_cons(ins, inss) = inss
+val-ATSINSlab(lab) = ins.instr_node
 //
-val () = emit_nspc (out, 2)
-val () = emit_text (out, "def")
-val () = emit_SPACE (out)
-val () = emit_label (out, lab)
-val () = emit_text (out, "():\n")
+val () = emit_nspc(out, 2)
+val () = emit_text(out, "def")
+val () = emit_SPACE(out)
+val () = emit_label(out, lab)
+val () = emit_text(out, "():\n")
 //
 val () = emit_fundef_nonlocal (out)
 //
-val () = emit_nspc (out, 4)
-val () = emit_text (out, "tmplab_py = 0\n")
+val () = emit_nspc(out, 4)
+val () = emit_text(out, "tmplab_py = 0\n")
 //
 in
-  auxlst2 (out, lab, inss)
+  auxlst2( out, lab, inss )
 end (* end of [auxlst] *)
 
-and auxlst2
+and
+auxlst2
 (
   out: FILEref, lab: label, inss: instrlst
 ) : void = let
@@ -1614,31 +1636,37 @@ in
 //
 case+ inss of
 //
-| list_nil ((*none*)) =>
+| list_nil
+    ((*none*)) =>
   {
-    val () = emit_nspc (out, 4)
-    val () = emit_text (out, "return\n")  
+    val () = emit_nspc(out, 4)
+    val () = emit_text(out, "return\n")  
   } (* end of [list_nil] *)
 //
 | list_cons
     (ins1, inss2) =>
   (
-    case ins1.instr_node of
-    | ATSINSlab (lab) =>
+    case+
+    ins1.instr_node
+    of (* case+ *)
+    | ATSINSlab(lab) =>
+      auxlst(out, inss) where
       {
-        val () = emit_nspc (out, 4)
-        val () = emit_label (out, lab)
-        val () = emit_text (out, "()\n")
-        val () = emit_nspc (out, 4)
-        val () = emit_text (out, "return\n")
-        val () = auxlst (out, inss)
-      }
+//
+        val () = emit_nspc(out, 4)
+        val () = emit_label(out, lab)
+        val () = emit_text(out, "()\n")
+        val () = emit_nspc(out, 4)
+        val () = emit_text(out, "return\n")
+//
+      } (* ATSINSlab *)
     | _ (*non-ATSINSlab*) =>
+      auxlst2(out, lab, inss2) where
       {
-        val () = (
-          emit2_instr (out, 4, ins1); emit_ENDL (out)
+        val () =
+        (
+          emit2_instr(out, 4, ins1); emit_ENDL(out)
         ) (* end of [val] *)
-        val () = auxlst2 (out, lab, inss2)
       } (* end of [non-ATSINSlab] *)
   ) (* end of [list_cons] *)
 //
@@ -1667,11 +1695,11 @@ emit_branchseqlst
 ) : void =
 (
 case+ inss of
-| list_nil () => ()
-| list_cons (ins, inss) =>
+| list_nil() => ()
+| list_cons(ins, inss) =>
   {
-    val () = emit_branchseq (out, ins)
-    val () = emit_branchseqlst (out, inss)
+    val () = emit_branchseq(out, ins)
+    val () = emit_branchseqlst(out, inss)
   }
 ) (* end of [emit_branchseqlst] *)
 
@@ -1682,18 +1710,18 @@ emit_fundef_nonlocal
   (out) = () where
 {
 //
-val f0as = the_f0arglst_get ()
-val () = emit_f0arglst_nonlocal (out, f0as)
+val f0as = the_f0arglst_get()
+val () = emit_f0arglst_nonlocal(out, f0as)
 //
-val tmpdecs = the_tmpdeclst_get ()
-val () = emit_tmpdeclst_nonlocal (out, tmpdecs)
+val tmpdecs = the_tmpdeclst_get()
+val () = emit_tmpdeclst_nonlocal(out, tmpdecs)
 //
 val () =
-emit_nspc (out, 4(*ind*))
+emit_nspc(out, 4(*ind*))
 val () =
-emit_text (out, "nonlocal funlab_py, tmplab_py\n")
+emit_text(out, "nonlocal funlab_py, tmplab_py\n")
 //
-val inss_caseof = the_caseofseqlst_get ()
+val inss_caseof = the_caseofseqlst_get()
 val () = emit_mbranchlst_nonlocal(out, inss_caseof)
 //
 } // end of [emit_fundef_nonlocal]
@@ -1717,13 +1745,14 @@ emit_caseofseq
   out: FILEref, ins0: instr
 ) : void = let
 //
-val-ATScaseofseq(inss) = ins0.instr_node
+val-
+ATScaseofseq(inss) = ins0.instr_node
 //
-val tls = caseofseq_get_tmplablst (ins0)
-val ((*update*)) = the_branchlablst_set (tls)
+val tls = caseofseq_get_tmplablst(ins0)
+val ((*update*)) = the_branchlablst_set(tls)
 //
 in
-  emit_branchseqlst (out, inss)
+  emit_branchseqlst(out, inss)
 end // end of [emit_caseofseq]
 
 (* ****** ****** *)
@@ -1735,31 +1764,33 @@ emit_caseofseqlst
 ) : void =
 (
 case+ inss of
-| list_nil () => ()
-| list_cons (ins, inss) =>
+| list_nil() => ()
+| list_cons(ins, inss) =>
   {
-    val () = emit_caseofseq (out, ins)
-    val () = emit_caseofseqlst (out, inss)
+    val () = emit_caseofseq(out, ins)
+    val () = emit_caseofseqlst(out, inss)
   }
 ) (* end of [emit_caseofseqlst] *)
 
 (* ****** ****** *)
 //
 extern
-fun emit_f0arg : emit_type (f0arg)
-extern
-fun emit_f0marg : emit_type (f0marg)
-extern
-fun emit_f0head : emit_type (f0head)
+fun
+emit_f0arg : emit_type (f0arg)
+and
+emit_f0marg : emit_type (f0marg)
+and
+emit_f0head : emit_type (f0head)
 //
 extern
-fun emit_f0body : emit_type (f0body)
-extern
-fun emit_f0body_0 : emit_type (f0body)
-extern
-fun emit_f0body_tlcal : emit_type (f0body)
-extern
-fun emit_f0body_tlcal2 : emit_type (f0body)
+fun
+emit_f0body : emit_type (f0body)
+and
+emit_f0body_0 : emit_type (f0body)
+and
+emit_f0body_tlcal : emit_type (f0body)
+and
+emit_f0body_tlcal2 : emit_type (f0body)
 //
 (* ****** ****** *)
 
@@ -1771,8 +1802,8 @@ in
 case+
 f0a.f0arg_node of
 //
-| F0ARGnone _ => emit_text (out, "__NONE__")
-| F0ARGsome (arg, s0e) => emit_tmpvar (out, arg)
+| F0ARGnone _ => emit_text(out, "__NONE__")
+| F0ARGsome(arg, s0e) => emit_tmpvar(out, arg)
 //
 end // end of [emit_f0arg]
 
@@ -1789,18 +1820,18 @@ loop
 ) : void =
 (
 case+ f0as of
-| list_nil () => ()
-| list_cons (f0a, f0as) => let
+| list_nil() => ()
+| list_cons(f0a, f0as) => let
     val () =
-      if i > 0 then emit_text (out, ", ")
+      if i > 0 then emit_text(out, ", ")
     // end of [val]
   in
-    emit_f0arg (out, f0a); loop (out, f0as, i+1)
+    emit_f0arg(out, f0a); loop(out, f0as, i+1)
   end // end of [list_cons]
 )
 //
 in
-  loop (out, f0ma.f0marg_node, 0)
+  loop(out, f0ma.f0marg_node, 0)
 end // end of [emit_f0marg]
 
 (* ****** ****** *)
@@ -1809,10 +1840,11 @@ implement
 emit_f0head
   (out, fhd) = let
 //
-val f0as =
-  f0head_get_f0arglst (fhd)
+val
+f0as =
+f0head_get_f0arglst(fhd)
 //
-val () = the_f0arglst_set (f0as)
+val () = the_f0arglst_set(f0as)
 //
 in
 //
@@ -1821,12 +1853,16 @@ fhd.f0head_node of
 | F0HEAD
     (fid, f0ma, res) =>
   {
-    val () = emit_tmpvar (out, fid)
-    val () = emit_LPAREN (out)
-    val () = emit_f0marg (out, f0ma)
-    val () = emit_RPAREN (out)
-    val () = emit_text (out, ":")
-  }
+    val () =
+    emit_tmpvar(out, fid)
+//
+    val () = emit_LPAREN(out)
+    val () = emit_f0marg(out, f0ma)
+    val () = emit_RPAREN(out)
+//
+    val () = emit_text(out, ":")
+//
+  } (* end of [F0HEAD] *)
 //
 end // end of [emit_f0head]
 
@@ -1848,16 +1884,16 @@ val inss_body =
 val inss_caseof =
   f0body_collect_caseof(fbody)
 //
-val () = the_tmpdeclst_set (tmpdecs)
-val () = the_funbodylst_set (inss_body)
-val () = the_caseofseqlst_set (inss_caseof)
+val () = the_tmpdeclst_set(tmpdecs)
+val () = the_funbodylst_set(inss_body)
+val () = the_caseofseqlst_set(inss_caseof)
 //
-val () = emit_tmpdeclst_initize (out, tmpdecs)
+val () = emit_tmpdeclst_initize(out, tmpdecs)
 //
-val () = emit_nspc (out, 2(*ind*))
-val () = emit_text (out, "funlab_py = None\n")
-val () = emit_nspc (out, 2(*ind*))
-val () = emit_text (out, "tmplab_py = None\n")
+val () = emit_nspc(out, 2(*ind*))
+val () = emit_text(out, "funlab_py = None\n")
+val () = emit_nspc(out, 2(*ind*))
+val () = emit_text(out, "tmplab_py = None\n")
 //
 val () = emit_mbranchlst_initize(out, inss_caseof)
 //
@@ -1867,9 +1903,9 @@ val () = emit_branchmaplst (out, inss_caseof)
 in
 //
 case+ knd of
-| 0 => emit_f0body_0 (out, fbody)
-| 1 => emit_f0body_tlcal (out, fbody)
-| 2 => emit_f0body_tlcal2 (out, fbody)
+| 0 => emit_f0body_0(out, fbody)
+| 1 => emit_f0body_tlcal(out, fbody)
+| 2 => emit_f0body_tlcal2(out, fbody)
 | _ => let val () = assertloc(false) in (*nothing*) end
 //
 end // end of [emit_f0body]
@@ -1890,11 +1926,15 @@ case+ inss of
 | list_nil () => ()
 | list_cons
     (ins0, inss1) => let
-    val-list_cons (ins1, inss2) = inss1
-    val () = emit2_ATSfunbodyseq (out, 2(*ind*), ins0)
-    val () = emit2_instr_ln (out, 2(*ind*), ins1)
+//
+    val-list_cons(ins1, inss2) = inss1
+//
+    val () =
+    emit2_ATSfunbodyseq(out, 2(*ind*), ins0)
+    val () = emit2_instr_ln(out, 2(*ind*), ins1)
+//
   in
-    auxlst (out, inss2)
+    auxlst(out, inss2)
   end // end of [list_cons]
 //
 ) (* end of [auxlst] *)
@@ -1921,31 +1961,38 @@ auxlst
 ) : void =
 (
 case+ inss of
-| list_nil () => ()
+| list_nil() => ()
 | list_cons
     (ins0, inss1) => let
-    val-list_cons (ins1, inss2) = inss1
-    val () = emit2_ATSfunbodyseq (out, 4(*ind*), ins0)
-    val () = emit_nspc (out, 4(*ind*))
-    val () = emit_text (out, "if (funlab_py == 0): break\n")
-    val () = emit2_instr_ln (out, 2(*ind*), ins1)
+//
+    val-
+    list_cons(ins1, inss2) = inss1
+//
+    val () =
+    emit2_ATSfunbodyseq(out, 4(*ind*), ins0)
+//
+    val () = emit_nspc(out, 4(*ind*))
+    val () = emit_text(out, "if (funlab_py == 0): break\n")
+    val () = emit2_instr_ln(out, 2(*ind*), ins1)
+//
   in
     auxlst (out, inss2)
   end // end of [list_cons]
 //
 ) (* end of [auxlst] *)
 //
-val () = emit_nspc (out, 2(*ind*))
-val () = emit_text (out, "while(1):\n")
-val () = emit_nspc (out, 4(*ind*))
-val () = emit_text (out, "funlab_py = 0\n")
+val () = emit_nspc(out, 2(*ind*))
+val () = emit_text(out, "while(1):\n")
+val () = emit_nspc(out, 4(*ind*))
+val () = emit_text(out, "funlab_py = 0\n")
 //
 val () =
 (
 case+
-fbody.f0body_node of
+fbody.f0body_node
+of (* case+ *)
 //
-| F0BODY (tds, inss) => auxlst (out, inss)
+| F0BODY(tds, inss) => auxlst(out, inss)
 //
 )
 //
@@ -1958,7 +2005,10 @@ end // end of [emit_f0body_tlcal]
 extern
 fun
 emit_mfundef_initize
-  (out: FILEref, inss: instrlst): void
+(
+out: FILEref
+,
+inss: instrlst): void
 //
 implement
 emit_mfundef_initize
@@ -1970,27 +2020,32 @@ fun auxlst
 ) : void =
 (
 case+ xs of
-| list_nil () => ()
-| list_cons (x, xs) => let
+| list_nil() => ()
+| list_cons(x, xs) => let
+//
     val fl =
-      funbodyseq_get_funlab (x)
+    funbodyseq_get_funlab(x)
+//
     val () =
     if i >= 2
-      then emit_text (out, ", ")
+      then emit_text(out, ", ")
     // end of [if]
-    val () = emit_int (out, i)
-    val () = emit_text (out, ": ")
-    val () = emit_label (out, fl)
-    val-list_cons (_, xs) = xs
+    val () = emit_int(out, i)
+    val () = emit_text(out, ": ")
+    val () = emit_label(out, fl)
+//    
   in
-    auxlst (out, xs, i+1)
+    let
+      val-list_cons(_, xs) = xs in auxlst(out, xs, i+1)
+    end // end of [let]
   end // end of [list_cons]
 )
 //
 val () =
-emit_nspc (out, 2(*ind*))
+emit_nspc(out, 2(*ind*))
 val () =
-emit_text (out, "mfundef = { ")
+emit_text(out, "mfundef = { ")
+//
 val () = auxlst (out, inss, 1)
 val () = emit_text (out, " }\n")
 //
@@ -2002,33 +2057,38 @@ end // end of [emit_mfundef_initize]
 //
 extern
 fun
-emit_the_funbodylst (out: FILEref): void
+emit_the_funbodylst
+(
+out: FILEref): void
 //
 implement
 emit_the_funbodylst
   (out) = let
 //
-fun auxfun
+fun
+auxfun
 (
   out: FILEref, ins0: instr
 ) : void = let
 //
-val-ATSfunbodyseq(inss) = ins0.instr_node
+val-
+ATSfunbodyseq
+  (inss) = ins0.instr_node
 //
-val-list_cons (ins1, inss) = inss
-val-ATSINSflab (fl) = ins1.instr_node
+val-list_cons(ins1, inss) = inss
+val-ATSINSflab(fl) = ins1.instr_node
 //
-val () = emit_nspc (out, 2)
-val () = emit_text (out, "def")
-val () = emit_SPACE (out)
-val () = emit_label (out, fl)
-val () = emit_text (out, "():\n")
+val () = emit_nspc(out, 2)
+val () = emit_text(out, "def")
+val () = emit_SPACE(out)
+val () = emit_label(out, fl)
+val () = emit_text(out, "():\n")
 //
-val () = emit_fundef_nonlocal (out)
+val () = emit_fundef_nonlocal(out)
 //
-val () = emit_nspc (out, 4)
-val () = emit_text (out, "funlab_py = 0\n")
-val () = emit2_instrlst (out, 4(*ind*), inss)
+val () = emit_nspc(out, 4)
+val () = emit_text(out, "funlab_py = 0\n")
+val () = emit2_instrlst(out, 4(*ind*), inss)
 //
 in
   // nothing
@@ -2042,19 +2102,24 @@ fun auxlst
 case+ inss of
 | list_nil () => ()
 | list_cons _ => let
-    val-list_cons (ins0, inss) = inss
-    val-list_cons (ins1, inss) = inss
-    val () = auxfun (out, ins0)
-    val () = emit2_instr_newline (out, 4(*ind*), ins1)
+//
+    val-
+    list_cons(ins0, inss) = inss
+    val-
+    list_cons(ins1, inss) = inss
+//
+    val () = auxfun(out, ins0)
+    val () = emit2_instr_newline(out, 4(*ind*), ins1)
+//
   in
-    auxlst (out, inss)
+    auxlst(out, inss)
   end // end of [auxlst]
 ) (* end of [auxlst] *)
 //
 val inss_body = the_funbodylst_get()
 //
-val () = auxlst (out, inss_body)
-val () = emit_mfundef_initize (out, inss_body)
+val () = auxlst(out, inss_body)
+val () = emit_mfundef_initize(out, inss_body)
 //
 in
   // nothing
@@ -2066,21 +2131,21 @@ implement
 emit_f0body_tlcal2
   (out, fbody) = let
 //
-val () = emit_nspc (out, 2(*ind*))
-val () = emit_text (out, "tmpret_py = None\n")
+val () = emit_nspc(out, 2(*ind*))
+val () = emit_text(out, "tmpret_py = None\n")
 //
-val () = emit_the_funbodylst (out)
+val () = emit_the_funbodylst(out)
 //
-val () = emit_nspc (out, 2(*ind*))
-val () = emit_text (out, "funlab_py = 1\n")
-val () = emit_nspc (out, 2(*ind*))
-val () = emit_text (out, "while(1):\n")
-val () = emit_nspc (out, 4(*ind*))
-val () = emit_text (out, "tmpret_py = mfundef.get(funlab_py)()\n")
-val () = emit_nspc (out, 4(*ind*))
-val () = emit_text (out, "if (funlab_py == 0): break\n")
-val () = emit_nspc (out, 2(*ind*))
-val () = emit_text (out, "return tmpret_py\n")
+val () = emit_nspc(out, 2(*ind*))
+val () = emit_text(out, "funlab_py = 1\n")
+val () = emit_nspc(out, 2(*ind*))
+val () = emit_text(out, "while(1):\n")
+val () = emit_nspc(out, 4(*ind*))
+val () = emit_text(out, "tmpret_py = mfundef.get(funlab_py)()\n")
+val () = emit_nspc(out, 4(*ind*))
+val () = emit_text(out, "if (funlab_py == 0): break\n")
+val () = emit_nspc(out, 2(*ind*))
+val () = emit_text(out, "return tmpret_py\n")
 //
 in
   // nothing
@@ -2094,9 +2159,13 @@ emit_f0decl
 in
 //
 case+
-fdec.f0decl_node of
-| F0DECLnone (fhd) => () 
-| F0DECLsome (fhd, fbody) =>
+fdec.f0decl_node
+of (* case+ *)
+| F0DECLnone
+    (fhd) => () 
+  // F0DECLnone
+| F0DECLsome
+    (fhd, fbody) =>
   {
     val () = emit_ENDL (out)
     val () = emit_text (out, "def")
@@ -2123,20 +2192,22 @@ loop
 (
 //
 case+ d0cs of
-| list_nil () => ()
+| list_nil
+    ((*void*)) => ()
+  // list_nil
 | list_cons
     (d0c, d0cs) => let
     val () =
       emit_d0ecl (out, d0c)
     // end of [val]
   in
-    loop (out, d0cs)
+    loop(out, d0cs)
   end // end of [list_cons]
 //
 ) (* end of [loop] *)
 //
 in
-  loop (out, d0cs)
+  loop(out, d0cs)
 end // end of [emit_toplevel]
 
 (* ****** ****** *)
