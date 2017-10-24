@@ -1560,35 +1560,36 @@ d0c0.d0ecl_node of
 | D0Cstatmp
     (tmp, opt) =>
   {
-    val () = emit_ENDL (out)
-    val () = the_statmpdeclst_insert (d0c0)
+    val () = emit_ENDL(out)
+    val () = the_statmpdeclst_insert(d0c0)
     val () = (
       case+ opt of
       | Some _ => () | None () => emit_text(out, "#")
     ) (* end of [val] *)
     val () = (
-      emit_tmpvar (out, tmp); emit_text (out, " = None\n")
+      emit_tmpvar(out, tmp); emit_text(out, " = None\n")
     ) (* end of [val] *)
   } (* end of [D0Cstatmp] *)
 //
 | D0Cextcode (toks) =>
   {
-    val () = emit_ENDL (out)
     val () =
-      emit_text (out, ATSEXTCODE_BEG)
-    val () = emit_extcode (out, toks) // HX: verbatim output
+      emit_ENDL(out)
     val () =
-      emit_text (out, ATSEXTCODE_END)
-    val ((*void*)) = emit_newline (out)
+      emit_text(out, ATSEXTCODE_BEG)
+    val () = emit_extcode(out, toks) // HX: verbatim output
+    val () =
+      emit_text(out, ATSEXTCODE_END)
+    val ((*void*)) = emit_newline(out)
   } (* end of [D0Cextcode] *)
 //
 | D0Cfundecl
-    (fk, f0d) => emit_f0decl (out, f0d)
+    (fk, f0d) => emit_f0decl(out, f0d)
 //
 | D0Cclosurerize
   (
     fl, env, arg, res
-  ) => emit_closurerize (out, fl, env, arg, res)
+  ) => emit_closurerize(out, fl, env, arg, res)
 //
 | D0Cdynloadflag_init
     (flag) => (
@@ -1598,10 +1599,11 @@ d0c0.d0ecl_node of
 //  
   ) (* end of [D0Cdynloadflag_init] *)
 | D0Cdynloadflag_minit
-    (flag) => {
-    val () = emit_ENDL (out)
+    (flag) => () where
+  {
+    val () = emit_ENDL(out)
     val () = (
-      emit_tmpvar (out, flag); emit_text (out, " = 0\n")
+      emit_tmpvar(out, flag); emit_text(out, " = 0\n")
     ) (* end of [val] *)
   } (* end of [D0Cdynloadflag_minit] *)
 //
