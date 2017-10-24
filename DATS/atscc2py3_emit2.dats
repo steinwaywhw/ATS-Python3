@@ -87,14 +87,15 @@ implement
 emit_the_statmpdeclst
   (out, ind) = let
 //
-fun auxlst
+fun
+auxlst
 (
   out: FILEref, xs: d0eclist
 ) : void =
 (
 case+ xs of
-| list_nil () => ()
-| list_cons (x, xs) => let
+| list_nil() => ()
+| list_cons(x, xs) => let
     val-
     D0Cstatmp
       (tmp, opt) = x.d0ecl_node
@@ -105,21 +106,21 @@ case+ xs of
       (
         auxlst(out, xs)
       ) (* None *)
-    | Some _ => let
+    | Some _ =>
+      auxlst(out, xs) where
+      {
         val () = emit_ENDL(out)
         val () = emit_nspc(out, ind)
         val () =
         (
           emit_text(out, "global "); emit_tmpvar(out, tmp)
         ) (* end of [val] *)
-      in
-        auxlst (out, xs)
-      end // end of [Some]
+      } (* end of [Some] *)
   end // end of [list_cons]
 ) (* end of [auxlst] *)
 //
 in
-  auxlst (out, the_statmpdeclst_get())
+  auxlst(out, the_statmpdeclst_get())
 end // end of [emit_the_statmpdeclst]
 //
 (* ****** ****** *)
@@ -128,9 +129,9 @@ extern
 fun
 emit_f0arglst_nonlocal
 (
-out: FILEref
+out : FILEref
 ,
-f0as: f0arglst ): void
+f0as : f0arglst): void
 //
 implement
 emit_f0arglst_nonlocal
@@ -149,14 +150,17 @@ case+ f0as of
     case-
     f0a.f0arg_node
     of (* case- *)
-    | F0ARGsome (arg, _) => let
+    | F0ARGsome
+        (arg, _) => let
         val () =
-        if i > 0
-          then emit_text (out, ", ")
-        // end of [if]
-        val () = emit_tmpvar (out, arg)
+        if i > 0 then
+        (
+        emit_text(out, ", ")
+        ) (* end of [if] *)
+        val () =
+        emit_tmpvar(out, arg)
       in
-        auxlst (out, f0as, i+1)
+        auxlst(out, f0as, i+1)
       end // end of [F0ARGsome]
   ) (* end of [list_cons] *)
 )
@@ -171,11 +175,12 @@ case+ f0as of
 | list_cons _ =>
   {
     val () =
-    emit_nspc (out, 4(*ind*))
+    emit_nspc(out, 4(*ind*))
     val () =
-    emit_text (out, "nonlocal ")
-    val () = auxlst (out, f0as, 0(*i*))
-    val () = emit_ENDL (out)
+    emit_text(out, "nonlocal ")
+    val () =
+    auxlst(out, f0as, 0(*i*))
+    val ((*closed*)) = emit_ENDL(out)
   } (* list_cons *)
 //
 end // end of [emit_f0arglst_nonlocal]
@@ -185,40 +190,46 @@ end // end of [emit_f0arglst_nonlocal]
 extern
 fun
 emit_tmpdeclst_initize
-  (out: FILEref, tds: tmpdeclst): void
+(
+out : FILEref
+,
+tds : tmpdeclst): void
 //
 implement
 emit_tmpdeclst_initize
   (out, tds) = let
 //
-fun auxlst
+fun
+auxlst
 (
   out: FILEref, tds: tmpdeclst
 ) : void =
 (
 case+ tds of
-| list_nil () => ()
-| list_cons (td, tds) =>
+| list_nil() => ()
+| list_cons(td, tds) =>
   (
     case+
     td.tmpdec_node
     of (* case+ *)
-    | TMPDECnone
-        (tmp) => auxlst (out, tds)
-      // end of [TMPDECnone]
-    | TMPDECsome
-        (tmp, _) => let
-        val () = emit_nspc (out, 2(*ind*))
-        val () = emit_tmpvar (out, tmp)
-        val () = emit_text (out, " = None\n")
-      in
-        auxlst (out, tds)
-      end // end of [TMPDECsome]
+    | TMPDECnone(tmp) =>
+      (
+        auxlst(out, tds)
+      ) // end of [TMPDECnone]
+    | TMPDECsome(tmp, _) =>
+        auxlst(out, tds) where
+      {
+        val () =
+          emit_nspc(out, 2(*ind*))
+        // end of [val]
+        val () = emit_tmpvar(out, tmp)
+        val () = emit_text(out, " = None\n")
+      } (* end of [TMPDECsome] *)
   ) (* end of [list_cons] *)
 )
 //
 in
-  auxlst (out, tds)
+  auxlst(out, tds)
 end // end of [emit_tmpdeclst_initize]
 //
 (* ****** ****** *)
@@ -226,55 +237,58 @@ end // end of [emit_tmpdeclst_initize]
 extern
 fun
 emit_tmpdeclst_nonlocal
-  (out: FILEref, tds: tmpdeclst): void
+(
+out: FILEref
+,
+tds: tmpdeclst) : void
 //
 implement
 emit_tmpdeclst_nonlocal
   (out, tds) = let
 //
-fun auxlst
+fun
+auxlst
 (
-  out: FILEref, tds: tmpdeclst, i: int
+  out: FILEref
+, tds: tmpdeclst, i: int
 ) : void =
 (
 case+ tds of
-| list_nil () => ()
-| list_cons (td, tds) =>
+| list_nil() => ()
+| list_cons(td, tds) =>
   (
     case+
     td.tmpdec_node
     of (* case+ *)
-    | TMPDECnone
-        (tmp) =>
+    | TMPDECnone(tmp) =>
       (
         auxlst(out, tds, i)
       ) (* TMPDECnone *)
-    | TMPDECsome
-        (tmp, _) => let
+    | TMPDECsome(tmp, _) =>
+      auxlst(out, tds, i+1) where
+      {
         val () =
-        if i > 0 then
-          emit_text (out, ", ")
+        if i > 0
+          then emit_text(out, ", ")
         // end of [if]
-        val () = emit_tmpvar (out, tmp)
-      in
-        auxlst (out, tds, i+1)
-      end // end of [TMPDECsome]
+        val () = emit_tmpvar(out, tmp)
+      } (* end of [TMPDECsome] *)
   ) (* end of [list_cons] *)
 )
 //
 in
 //
 case+ tds of
-| list_nil () => ()
-| list_cons _ =>
+| list_nil() => ()
+| list_cons _ => () where
   {
     val () =
-    emit_nspc (out, 4(*ind*))
+    emit_nspc(out, 4(*ind*))
     val () =
-    emit_text (out, "nonlocal")
-    val () = emit_SPACE (out)
-    val () = auxlst (out, tds, 0)
-    val () = emit_newline (out)
+    emit_text(out, "nonlocal")
+    val () = emit_SPACE(out)
+    val () = auxlst(out, tds, 0)
+    val () = emit_newline(out)
   } (* end of [list_cons] *)
 //
 end // end of [emit_tmpdeclst_nonlocal]
@@ -284,37 +298,42 @@ end // end of [emit_tmpdeclst_nonlocal]
 extern
 fun
 emit_mbranchlst_initize
-(out: FILEref, inss: instrlst): void
+( out: FILEref
+, inss: instrlst): void
 //
 implement
 emit_mbranchlst_initize
   (out, inss) = let
 //
-fun auxlst
+fun
+auxlst
 (
-  out: FILEref, inss: instrlst, i: int
+  out: FILEref
+, inss: instrlst, i: int
 ) : void =
 (
 //
 case+ inss of
 | list_nil() => ()
-| list_cons(_, inss) =>
+| list_cons
+    (_, inss) => () where
   {
     val () =
-      emit_nspc (out, 2(*ind*))
+      emit_nspc(out, 2(*ind*))
     // end of [val]
     val () =
     (
-      emit_text (out, "mbranch_");
-      emit_int (out, i); emit_text (out, " = None\n")
+      emit_text(out, "mbranch_");
+      emit_int(out, i);
+      emit_text(out, " = None\n")
     )
-    val () = auxlst (out, inss, i+1)
+    val () = auxlst(out, inss, i+1)
   } (* end of [list_cons] *)
 //
 ) (* end of [auxlst] *)
 //
 in
-  auxlst (out, inss, 1(*i*))
+  auxlst(out, inss, 1(*i*))
 end // end of [emit_mbranchlst_initize]
 //
 (* ****** ****** *)
@@ -322,28 +341,33 @@ end // end of [emit_mbranchlst_initize]
 extern
 fun
 emit_mbranchlst_nonlocal
-  (out: FILEref, inss: instrlst): void
+( out: FILEref
+, inss: instrlst) : void
 //
 implement
 emit_mbranchlst_nonlocal
   (out, inss) = let
 //
-fun auxlst
+fun
+auxlst
 (
-  out: FILEref, inss: instrlst, i: int
+  out: FILEref
+, inss: instrlst, i: int
 ) : void =
 (
 case+ inss of
 | list_nil() => ()
 | list_cons(_, inss) => let
     val () =
-      if i >= 2 then emit_text (out, ", ")
+    if i >= 2
+      then emit_text(out, ", ")
+    // end of [val
     val () =
     (
-      emit_text (out, "mbranch_"); emit_int (out, i)
+      emit_text(out, "mbranch_"); emit_int(out, i)
     ) (* end of [val] *)
   in
-    auxlst (out, inss, i+1)
+    auxlst(out, inss, i+1)
   end // end of [list_cons]
 //
 ) (* end of [auxlst] *)
@@ -351,15 +375,20 @@ case+ inss of
 in
 //
 case+ inss of
-| list_nil () => ()
-| list_cons _ =>
+| list_nil() => ()
+| list_cons _ => () where
   {
+//
     val () =
-    emit_nspc (out, 4(*ind*))
+    emit_nspc(out, 4(*ind*))
     val () =
-    emit_text (out, "nonlocal ")
-    val () = auxlst (out, inss, 1(*i*))
-    val () = emit_ENDL (out)
+    emit_text(out, "nonlocal ")
+//
+    val () =
+    auxlst(out, inss, 1(*i*))
+//
+    val ((*closed*)) = emit_ENDL(out)
+//
   } (* end of [list_cons] *)
 //
 end // end of [emit_mbranchlst_nonlocal]
@@ -422,13 +451,13 @@ the_caseofseqlst_set(inss: instrlst): void
 
 local
 //
-val the_f0arglst = ref<f0arglst> (list_nil)
-val the_tmpdeclst = ref<tmpdeclst> (list_nil)
+val the_f0arglst = ref<f0arglst>(list_nil)
+val the_tmpdeclst = ref<tmpdeclst>(list_nil)
 //
-val the_funbodylst = ref<instrlst> (list_nil)
+val the_funbodylst = ref<instrlst>(list_nil)
 //
-val the_branchlablst = ref<labelist> (list_nil)
-val the_caseofseqlst = ref<instrlst> (list_nil)
+val the_branchlablst = ref<labelist>(list_nil)
+val the_caseofseqlst = ref<instrlst>(list_nil)
 //
 in (* in-of-local *)
 
@@ -474,22 +503,29 @@ xs: instrlst, i: int
 ) : int = (
 //
 case+ xs of
-| list_nil () => ~1(*error*)
-| list_cons (x, xs) =>
+| list_nil
   (
-    case+ x.instr_node of
+    // argless
+  ) => ~1(*error*)
+| list_cons(x, xs) =>
+  (
+    case+
+    x.instr_node
+    of (* case+ *)
     | ATSfunbodyseq _ => let
-        val fl = funbodyseq_get_funlab (x)
+        val fl =
+          funbodyseq_get_funlab(x)
+        // end of [val]
       in
-        if n0 = fl.i0dex_sym then i else auxlst (xs, i+1)
+        if n0 = fl.i0dex_sym then i else auxlst(xs, i+1)
       end // end of [ATSfunbodyseq]
-    | _ (*non-ATSfunbody*) => auxlst (xs, i)
+    | _ (*non-ATSfunbody*) => auxlst(xs, i)
   ) (* end of [list_cons] *)
 //
 ) (* end of [auxlst] *)
 //
 in
-  auxlst (the_funbodylst_get(), 1)
+  auxlst(the_funbodylst_get(), 1)
 end // end of [funlab_get_index]
 
 (* ****** ****** *)
@@ -503,14 +539,16 @@ val n0 = lab0.i0dex_sym
 fun
 auxlst
 (
-  xs: labelist, i: int
+xs: labelist, i: int
 ) : int =
 (
 case+ xs of
-| list_nil () => ~1(*error*)
-| list_cons (x, xs) =>
-    if n0 = x.i0dex_sym then i else auxlst (xs, i+1)
-  // end of [list_cons]
+| list_nil
+  (
+    // argless
+  ) => ~1(*error*)
+| list_cons(x, xs) =>
+  if n0 = x.i0dex_sym then i else auxlst (xs, i+1)
 )
 //
 in
