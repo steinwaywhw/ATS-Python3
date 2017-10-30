@@ -19,11 +19,14 @@ $(MAKE) \
 -C BUILD -f ../Makefile_build npm
 
 ######
-
+#
+cleanall:: ; \
+$(MAKE) -C CATS-parsemit cleanall
+#
 cleanall:: ; \
 $(MAKE) \
 -C BUILD -f ../Makefile_build cleanall
-
+#
 ######
 
 ###### end of [Makefile] ######
