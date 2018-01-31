@@ -4,6 +4,7 @@
 #
 ######
 
+NPM=npm
 MAKE=make
 
 ######
@@ -19,9 +20,16 @@ $(MAKE) \
 -C BUILD -f ../Makefile_build npm
 
 ######
-#
-cleanall:: ; \
-$(MAKE) -C CATS-parsemit cleanall
+
+npm-update:: ; $(NPM) update
+npm-install:: ; $(NPM) install
+
+######
+
+cleanall:: ; rm -f node_modules -r
+cleanall:: ; rm -f package-lock.json
+
+######
 #
 cleanall:: ; \
 $(MAKE) \
